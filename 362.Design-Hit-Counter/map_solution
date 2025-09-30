@@ -1,0 +1,50 @@
+class HitCounter {
+
+    // main problem is what data strucutre should we use
+    
+    // map of timestamp to hits would work
+    //      we would have to call our map 300 times for getHits (O(1))
+    //      adding a hit would also cost O(1)
+    // this map could get really large, but we know there can only be 300 calls so non issue
+
+    // another approach would be to use something that would automatically always get something within
+    // the past 5 minutes
+    // we could also have a queue of timestamps, and always add the new hits to the end.
+    //      for getHit, we would first get rid of all the timestamps from the queue longer than 300 seconds
+    //      then we could just return the size of the queue
+    //      adding a hit is just adding to the queue
+    // ok so this won't actually work because it is possible that timestamp used in getHits 
+    // is not the most recent time stamp, which would make the queue not work.
+    // correction: we can assume the timestamp used in getHits is the most recent time stamp, so it wil work.
+
+    Map<Integer, Integer> timestampToHits;
+
+    public HitCounter() {
+        timestampToHits = new HashMap<>();
+    }
+    
+    public void hit(int timestamp) {
+        if (timestampToHits.containsKey(timestamp)) {
+            timestampToHits.put(timestamp, timestampToHits.get(timestamp) + 1);
+        } else {
+            timestampToHits.put(timestamp, 1);
+        }
+    }
+    
+    public int getHits(int timestamp) {
+        int totalHits = 0;
+        for (int i = timestamp; i > timestamp - 300; i--) {
+            if (timestampToHits.containsKey(i)) {
+                totalHits += timestampToHits.get(i);
+            }
+        }
+        return totalHits;
+    }
+}
+
+/**
+ * Your HitCounter object will be instantiated and called as such:
+ * HitCounter obj = new HitCounter();
+ * obj.hit(timestamp);
+ * int param_2 = obj.getHits(timestamp);
+ */
