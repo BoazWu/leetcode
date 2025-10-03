@@ -1,0 +1,106 @@
+class Solution {
+    public boolean isOneEditDistance(String s, String t) {
+        if (Math.abs(s.length() - t.length()) > 1) {
+            return false;
+        }
+        if (s.length() + 1 == t.length()) {
+            int sIndex = 0;
+            int tIndex = 0;
+            boolean seenDifference = false;
+            while (tIndex < t.length() && sIndex < s.length()) {
+                if (s.charAt(sIndex) != t.charAt(tIndex)) {
+                    if (seenDifference) {
+                        return false;
+                    } else {
+                        seenDifference = true;
+                        tIndex++;
+                    }
+                } else {
+                    sIndex++;
+                    tIndex++;
+                }
+            }
+            return true;
+        } else if (s.length() == t.length()) {
+            int sIndex = 0;
+            int tIndex = 0;
+            boolean seenDifference = false;
+            while (tIndex < t.length() && sIndex < s.length()) {
+                if (s.charAt(sIndex) != t.charAt(tIndex)) {
+                    if (seenDifference) {
+                        // return false since there are two differences
+                        System.out.println("2 difference");
+                        return false;
+                    } else {
+                        seenDifference = true;
+                    }
+                } 
+                sIndex++;
+                tIndex++;
+            }
+            // we need to see at least one difference
+            return seenDifference;
+        } else if (s.length() - 1 == t.length()) {
+            int sIndex = 0;
+            int tIndex = 0;
+            boolean seenDifference = false;
+            while (tIndex < t.length() && sIndex < s.length()) {
+                if (s.charAt(sIndex) != t.charAt(tIndex)) {
+                    if (seenDifference) {
+                        return false;
+                    } else {
+                        seenDifference = true;
+                        sIndex++;
+                    }
+                } else {
+                    sIndex++;
+                    tIndex++;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+}
+
+
+/*
+
+    Observations:
+    We know that it is possible we are one edit away if the length of t is at most 1 away from s.
+
+    If we are less than one, we are potentially one insertation away
+        - Try every possible insertion
+
+        first we would need to identify the character that needs to be inserted
+
+        we can have two pointers, one on s and one on t
+        we check if both characters are equal, if they are move on to next
+        if not, if there has already been one difference, return false 
+        if not and there has not been one difference, move the t pointer and count one difference ()
+
+    If we are equal, we are potentially one replacement away
+        - In this case we can try every possible replacement
+
+        we can iterate through string s, and compare every char to string t. 
+        if there is exactly one difference return true, otherwise false
+    If we are greater than 1, we are potentially one deletion away
+        - In this case, we can try every possible deletion, and compare s to t each time
+
+        easiest case
+
+    Time: O(N)
+    Space: O(N) (we are making new strings)
+
+    Is there any way to brute force?
+
+    What if we try to find the differences in t?
+
+
+
+    We could make a map of each character in string s to its index
+
+
+
+
+*/
